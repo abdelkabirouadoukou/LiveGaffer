@@ -1,9 +1,9 @@
 """
 Concrete `MatchDataProvider` implementation backed by API-Football
-(via RapidAPI), with a built-in local-mock mode for development.
+(or API-SPORTS direct), with a built-in local-mock mode for development.
 
 Mode is controlled by `settings.data_source_mode`:
-  - "live": real HTTP calls to RapidAPI, rate-limited + retried, free-tier safe.
+  - "live": real HTTP calls to the provider, rate-limited + retried, free-tier safe.
   - "mock": reads static JSON fixtures from `data/mocks/`, zero network calls.
 
 Both modes return the exact same typed Pydantic objects, so nothing
@@ -62,7 +62,7 @@ _RETRYABLE_EXCEPTIONS = (ProviderConnectionError, ProviderRateLimitError)
 
 class APIFootballClient(MatchDataProvider):
     """
-    Free-tier-aware API-Football client.
+    Free-tier-aware API-Football / API-SPORTS client.
 
     Usage:
         async with APIFootballClient() as client:
@@ -82,12 +82,23 @@ class APIFootballClient(MatchDataProvider):
     # ------------------------------------------------------------------
     def _ensure_http_client(self) -> httpx.AsyncClient:
         if self._http_client is None:
+            base_url = self._settings.api_football_base_url
+            api_key = self._settings.require_api_football_key()
+            
+            headers = {"Accept": "application/json"}
+            
+            # Smart check: Dynamic header routing based on the target URL
+            if "api-sports.io" in base_url.lower():
+                headers["x-apisports-key"] = api_key
+                log.info("Initializing HTTP client targeting direct API-SPORTS engine")
+            else:
+                headers["x-rapidapi-key"] = api_key
+                headers["x-rapidapi-host"] = self._settings.api_football_host
+                log.info("Initializing HTTP client targeting RapidAPI gateway proxy")
+
             self._http_client = httpx.AsyncClient(
-                base_url=self._settings.api_football_base_url,
-                headers={
-                    "x-rapidapi-key": self._settings.require_rapidapi_key(),
-                    "x-rapidapi-host": self._settings.rapidapi_host,
-                },
+                base_url=base_url,
+                headers=headers,
                 timeout=API_FOOTBALL_REQUEST_TIMEOUT_SECONDS,
             )
         return self._http_client
@@ -107,7 +118,7 @@ class APIFootballClient(MatchDataProvider):
         retry=retry_if_exception_type(_RETRYABLE_EXCEPTIONS),
     )
     async def _get(self, endpoint: str, params: dict[str, Any] | None = None) -> dict:
-        """Perform a single rate-limited, retried GET against API-Football."""
+        """Perform a single rate-limited, retried GET against the provider."""
         client = self._ensure_http_client()
 
         async with self._rate_limiter:
@@ -118,19 +129,19 @@ class APIFootballClient(MatchDataProvider):
             except httpx.RequestError as exc:
                 raise ProviderConnectionError(f"Network error calling {endpoint}: {exc}") from exc
 
-        if response.status_code == 401 or response.status_code == 403:
+        if response.status_code in (401, 403):
             raise ProviderAuthenticationError(
-                "API-Football rejected the request — check RAPIDAPI_KEY."
+                "Provider rejected the request — check your configured API key."
             )
         if response.status_code == 429:
             retry_after = response.headers.get("Retry-After")
             raise ProviderRateLimitError(
-                "API-Football free-tier rate limit reached.",
+                "Provider free-tier rate limit reached.",
                 retry_after_seconds=float(retry_after) if retry_after else None,
             )
         if response.status_code >= 400:
             raise ProviderResponseError(
-                f"API-Football returned {response.status_code} for {endpoint}",
+                f"Provider returned {response.status_code} for {endpoint}",
                 status_code=response.status_code,
             )
 
@@ -140,7 +151,7 @@ class APIFootballClient(MatchDataProvider):
             raise ProviderDataValidationError(f"Non-JSON response from {endpoint}") from exc
 
         if payload.get("errors"):
-            log.warning("API-Football returned errors payload: {}", payload["errors"])
+            log.warning("Provider returned errors payload: {}", payload["errors"])
 
         return payload
 
@@ -199,9 +210,6 @@ class APIFootballClient(MatchDataProvider):
         except ValidationError as exc:
             raise ProviderDataValidationError(f"Could not parse fixture {fixture_id}: {exc}") from exc
 
-        # In mock mode the JSON file isn't actually filtered server-side (there's
-        # no server), so we must enforce the id match here ourselves — otherwise
-        # any fixture_id would silently return the single mock fixture on file.
         if fixture.fixture_id != fixture_id:
             raise FixtureNotFoundError(f"No fixture found with id={fixture_id}")
 

@@ -6,7 +6,11 @@
         "referee": "A. Mateu Lahoz",
         "timezone": "UTC",
         "date": "2026-06-30T19:00:00+00:00",
-        "venue": "Estadio Santiago Bernabeu",
+        "venue": {
+          "id": 1456,
+          "name": "Estadio Santiago Bernabeu",
+          "city": "Madrid"
+        },
         "status": {
           "long": "Second Half",
           "short": "2H",

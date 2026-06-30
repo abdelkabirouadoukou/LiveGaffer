@@ -53,15 +53,24 @@ class Goals(_APIModel):
     home: int | None = None
     away: int | None = None
 
+class Venue(_APIModel):
+    id: int | None = None
+    name: str | None = None
+    city: str | None = None
+
 
 class FixtureInfo(_APIModel):
     id: int
     referee: str | None = None
     timezone: str = "UTC"
     date: datetime
-    venue_name: str | None = Field(default=None, alias="venue")
+    venue: Venue | None = None
     status: MatchStatus
 
+    @property
+    def venue_name(self) -> str | None:
+        """Kept for backward compatibility with any existing `.venue_name` call sites."""
+        return self.venue.name if self.venue else None
 
 class FixtureTeams(_APIModel):
     home: TeamRef

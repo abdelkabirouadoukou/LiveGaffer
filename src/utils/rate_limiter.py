@@ -1,7 +1,7 @@
 """
 A minimal async sliding-window rate limiter.
 
-Used by `api_football_client.py` to stay under RapidAPI's free-tier
+Used by `api_football_client.py` to stay under RapidAPI or API-Football's free-tier
 burst limits (e.g. ~10 requests/minute) without needing an external
 dependency like `aiolimiter`.
 """

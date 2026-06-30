@@ -15,7 +15,7 @@ Polls (or, on demand, re-fetches) live match data through
 
 Defaults to `DATA_SOURCE_MODE=mock` (see `.env.example`), so the whole
 dashboard works end-to-end with zero API keys and zero network calls —
-flip to `live` once real RapidAPI / Groq / Gemini keys are configured.
+flip to `live` once real RapidAPI or API-Football / Groq / Gemini keys are configured.
 """
 
 from __future__ import annotations

@@ -84,7 +84,7 @@ FINISHED_MATCH_STATUSES: Final[set[str]] = {"FT", "AET", "PEN"}
 NOT_STARTED_STATUSES: Final[set[str]] = {"NS", "TBD"}
 
 # ---------------------------------------------------------------------------
-# HTTP / rate-limit tuning for the free RapidAPI tier
+# HTTP / rate-limit tuning for the free RapidAPI or API-Football tier
 # (API-Football free plan: 100 requests/day, ~10 req/min burst limit)
 # ---------------------------------------------------------------------------
 API_FOOTBALL_MAX_REQUESTS_PER_MINUTE: Final[int] = 8  # stay safely under 10/min

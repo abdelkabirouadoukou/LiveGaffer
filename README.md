@@ -11,6 +11,11 @@ Real-time match momentum, formation analysis, and LLM-generated tactical recomme
 [![Streamlit](https://img.shields.io/badge/UI-Streamlit-FF4B4B.svg)](https://streamlit.io)
 [![FastAPI](https://img.shields.io/badge/API-FastAPI-009688.svg)](https://fastapi.tiangolo.com)
 
+---
+
+### 📸 Dashboard Preview
+![LiveGaffer Dashboard Preview](assets/preview.png)
+
 </div>
 
 ---
@@ -19,7 +24,7 @@ Real-time match momentum, formation analysis, and LLM-generated tactical recomme
 
 LiveGaffer watches a live football match and acts as a virtual assistant manager. It pulls live fixture data, computes a momentum/pressure index for each team, independently verifies each team's formation from raw lineup data, and feeds all of that into an LLM tactical analyst that returns structured, actionable recommendations — substitutions, formation tweaks, attacking or defensive adjustments — each with a priority and a rationale tied to what's actually happening in the match.
 
-Everything runs on **100% free-tier services**: [API-Football](https://www.api-football.com/) (RapidAPI) for match data, and [Groq](https://console.groq.com) (primary) with [Gemini](https://ai.google.dev/) (fallback) for the AI engine. A bundled mock-data mode lets the entire app — UI, momentum engine, formation analyzer, and AI panel — run end-to-end with **zero API keys and zero network calls**.
+Everything runs on **100% free-tier services**: Direct targeting to [API-SPORTS](https://api-sports.io/) or via [API-Football](https://www.api-football.com/) (RapidAPI proxy wrapper) for match data, and [Groq](https://console.groq.com) (primary) with [Gemini](https://ai.google.dev/) (fallback) for the AI engine. A bundled mock-data mode lets the entire app — UI, momentum engine, formation analyzer, and AI panel — run end-to-end with **zero API keys and zero network calls**.
 
 ## Features
 
@@ -28,13 +33,15 @@ Everything runs on **100% free-tier services**: [API-Football](https://www.api-f
 - **AI tactical analyst** — Groq-first, Gemini-fallback LLM pipeline that turns a match snapshot into a strict, Pydantic-validated `TacticalAnalysis`: summary, momentum read, key observations, and prioritized recommendations
 - **Mock-mode by default** — every layer works offline against bundled fixture JSON, so you can develop and demo without spending any free-tier quota
 - **Two presentation layers, one domain core** — a Streamlit dashboard for humans today, and an optional FastAPI REST layer ready for a Next.js (or any other) frontend tomorrow
-- **TTL caching + rate limiting** — keeps the app safely inside API-Football's and the LLM providers' free-tier limits, even under repeated polling
+- **TTL caching + rate limiting** — keeps the app safely inside the provider endpoints and the LLM providers' free-tier limits, even under repeated polling
 
 ## Architecture
 
 LiveGaffer is built in clean, dependency-inverted layers — each one only knows about the layer directly below it:
 
+
 ```
+
 ┌─────────────────────────────────────────────────────────┐
 │  app/            Presentation layer                     │
 │    streamlit_app.py     Live dashboard                  │
@@ -51,9 +58,10 @@ LiveGaffer is built in clean, dependency-inverted layers — each one only knows
 ├─────────────────────────────────────────────────────────┤
 │  config/         Typed settings & domain constants       │
 └─────────────────────────────────────────────────────────┘
+
 ```
 
-- **`data_providers`** — typed Pydantic schemas mirroring API-Football's real JSON shape, behind an abstract `MatchDataProvider` interface. The concrete client transparently switches between live HTTP calls and local mock JSON with zero downstream code changes.
+- **`data_providers`** — typed Pydantic schemas mirroring the engine's JSON shape, behind an abstract `MatchDataProvider` interface. The client automatically detects whether to communicate directly via native `API-SPORTS` keys or fall back to standard `RapidAPI` proxy gateways with no changes required to core modules.
 - **`core`** — pure, dependency-free Python: event normalization, the momentum/pressure engine, and the formation analyzer. Fully unit-testable with no I/O.
 - **`ai_engine`** — an abstract `LLMClient` interface implemented by Groq (primary) and Gemini (fallback), orchestrated by `TacticalAnalyst`, which builds the prompt, handles fallback-on-failure, and validates the response against a strict output schema.
 - **`services`** — wires the above together with TTL caching so a polling UI doesn't re-spend API or LLM quota on every refresh.
@@ -62,26 +70,26 @@ LiveGaffer is built in clean, dependency-inverted layers — each one only knows
 
 | Layer | Technology |
 |---|---|
-| Match data | [API-Football](https://www.api-football.com/) via RapidAPI (free tier) |
+| Match data | [API-SPORTS Engine](https://api-sports.io/) or [API-Football](https://www.api-football.com/) via RapidAPI (free tier) |
 | AI — primary | [Groq](https://console.groq.com) (Llama 3.3, free tier) |
 | AI — fallback | [Google Gemini](https://ai.google.dev/) (free tier) |
 | Validation | Pydantic v2 / Pydantic Settings |
 | HTTP | httpx + tenacity (retry/backoff) |
 | Dashboard | Streamlit |
 | API (optional) | FastAPI + Uvicorn |
-| Logging | Loguru |
+| Logging | Loguru / Custom Log Wrappers |
 
 ## Getting started
 
 ### Prerequisites
 
 - Python 3.11+
-- (Optional, for live mode) a free [RapidAPI](https://rapidapi.com/api-sports/api/api-football) key for API-Football, a free [Groq](https://console.groq.com) API key, and optionally a free [Gemini](https://ai.google.dev/) API key
+- (Optional, for live mode) a free [API-SPORTS](https://api-sports.io/) dashboard key (or legacy RapidAPI key), a free [Groq](https://console.groq.com) API key, and optionally a free [Gemini](https://ai.google.dev/) API key
 
 ### Installation
 
 ```bash
-git clone https://github.com/abdelkabirouadoukou/LiveGaffer.git
+git clone [https://github.com/abdelkabirouadoukou/LiveGaffer.git](https://github.com/abdelkabirouadoukou/LiveGaffer.git)
 cd LiveGaffer
 
 python -m venv .venv
@@ -89,6 +97,7 @@ source .venv/bin/activate      # Windows: .venv\Scripts\activate
 
 pip install -r requirements.txt
 cp .env.example .env
+
 ```
 
 By default, `.env` sets `DATA_SOURCE_MODE=mock` — the app runs fully offline against the bundled Real Madrid vs. Barcelona fixture in `data/mocks/`. No keys required to try it.
@@ -97,6 +106,7 @@ By default, `.env` sets `DATA_SOURCE_MODE=mock` — the app runs fully offline a
 
 ```bash
 streamlit run app/streamlit_app.py
+
 ```
 
 Open the URL Streamlit prints (typically `http://localhost:8501`). In mock mode, enter fixture ID `1035001` in the sidebar (it's the default) to load the sample match.
@@ -105,12 +115,13 @@ Open the URL Streamlit prints (typically `http://localhost:8501`). In mock mode,
 
 ```bash
 python -m uvicorn app.api.main:app --reload --port 8000
+
 ```
 
 Interactive docs at `http://127.0.0.1:8000/docs`.
 
 | Endpoint | Description |
-|---|---|
+| --- | --- |
 | `GET /health` | Liveness check + active data-source mode |
 | `GET /fixtures` | List currently live fixtures (`?league_id=` optional) |
 | `GET /fixtures/{id}/state` | Full derived match state — score, momentum, formations, events |
@@ -118,14 +129,21 @@ Interactive docs at `http://127.0.0.1:8000/docs`.
 
 ### Going live
 
-Set real credentials in `.env` and flip the mode:
+Set real credentials in `.env` and flip the mode. The setup adapts headers dynamically based on your chosen entry point:
 
 ```dotenv
 DATA_SOURCE_MODE=live
 
-RAPIDAPI_KEY=your_rapidapi_key
+# Switch base URL depending on whether you connect directly or via wrapper
+API_FOOTBALL_BASE_URL=[https://v3.football.api-sports.io](https://v3.football.api-sports.io)
+
+# Put your API key here (Accepts either direct keys or RapidAPI credentials via validation aliases)
+API_FOOTBALL_KEY=******************
+
+# AI Engine Keys
 GROQ_API_KEY=your_groq_key
 GEMINI_API_KEY=your_gemini_key   # optional fallback
+
 ```
 
 No other code changes are needed — every layer above `data_providers` and `ai_engine` is identical in mock and live mode.
@@ -135,11 +153,11 @@ No other code changes are needed — every layer above `data_providers` and `ai_
 All settings are typed and validated via `config/settings.py` (Pydantic Settings), loaded from `.env`:
 
 | Variable | Default | Description |
-|---|---|---|
-| `DATA_SOURCE_MODE` | `mock` | `mock` (offline) or `live` (real API-Football calls) |
-| `RAPIDAPI_KEY` | — | Required when `DATA_SOURCE_MODE=live` |
-| `RAPIDAPI_HOST` | `api-football-v1.p.rapidapi.com` | RapidAPI host header |
-| `API_FOOTBALL_BASE_URL` | `https://api-football-v1.p.rapidapi.com/v3` | API-Football base URL |
+| --- | --- | --- |
+| `DATA_SOURCE_MODE` | `mock` | `mock` (offline) or `live` (real API calls) |
+| `RAPIDAPI_KEY` / `API_FOOTBALL_KEY` | — | Required key when live mode is active (parsed fluidly via Pydantic aliases) |
+| `API_FOOTBALL_HOST` | `v3.football.api-sports.io` | Destination host header fallback configuration |
+| `API_FOOTBALL_BASE_URL` | `https://v3.football.api-sports.io` | Base endpoint URL target (Direct API-SPORTS or alternative RapidAPI wrapper) |
 | `GROQ_API_KEY` | — | Required for AI analysis (primary provider) |
 | `GROQ_MODEL` | `llama-3.3-70b-versatile` | Groq model name |
 | `GEMINI_API_KEY` | — | Optional fallback provider |
@@ -153,11 +171,11 @@ All settings are typed and validated via `config/settings.py` (Pydantic Settings
 ```
 LiveGaffer/
 ├── config/
-│   ├── settings.py            # Typed env config (Pydantic Settings)
+│   ├── settings.py            # Typed env config (Pydantic Settings with smart mapping)
 │   └── constants.py           # League IDs, formation shapes, momentum weights
 │
 ├── src/
-│   ├── data_providers/        # API-Football client + mock-mode + schemas
+│   ├── data_providers/        # API-Football/API-SPORTS client + mock-mode + schemas
 │   ├── core/                  # Pure domain logic: momentum, formations, events
 │   ├── ai_engine/              # Groq/Gemini clients + tactical analyst orchestrator
 │   ├── services/                # Caching + orchestration glue
@@ -174,6 +192,7 @@ LiveGaffer/
 │   └── cache/                  # Runtime cache storage (gitignored)
 │
 └── tests/
+
 ```
 
 ## How the momentum engine works
@@ -194,15 +213,15 @@ The differential between both teams' indices drives how urgently the AI tactical
 
 ## Roadmap
 
-- [x] Phase 1 — Foundation & configuration
-- [x] Phase 2 — Data provider layer (API-Football + mock mode)
-- [x] Phase 3 — Core domain logic (momentum, formations, events)
-- [x] Phase 4 — AI tactical engine (Groq + Gemini)
-- [x] Phase 5 — Service orchestration, Streamlit dashboard, optional FastAPI layer
-- [ ] Automated test suite (`tests/`)
-- [ ] Next.js frontend consuming the FastAPI layer
-- [ ] Persistent cache backend (Redis) for multi-worker deployments
-- [ ] Historical match review / post-match report generation
+* [x] Phase 1 — Foundation & configuration
+* [x] Phase 2 — Data provider layer (API-Football integration + adaptive dual routing)
+* [x] Phase 3 — Core domain logic (momentum, formations, events)
+* [x] Phase 4 — AI tactical engine (Groq + Gemini)
+* [x] Phase 5 — Service orchestration, Streamlit dashboard, optional FastAPI layer
+* [ ] Automated test suite (`tests/`)
+* [ ] Next.js frontend consuming the FastAPI layer
+* [ ] Persistent cache backend (Redis) for multi-worker deployments
+* [ ] Historical match review / post-match report generation
 
 ## Contributing
 
@@ -210,4 +229,4 @@ Issues and pull requests are welcome. Please keep new code in the same layered s
 
 ## License
 
-[MIT](LICENSE)
+[MIT](https://www.google.com/search?q=LICENSE)

@@ -5,7 +5,7 @@ Both `api_football_client.py` (live) and a future/implicit mock provider
 implement this interface, so `services/live_match_service.py` can depend on
 `MatchDataProvider` without caring which concrete implementation is wired in.
 This is the Dependency Inversion piece that lets us develop against
-`data/mocks/*.json` all day without burning RapidAPI free-tier quota, then
+`data/mocks/*.json` all day without burning RapidAPI or API-Football free-tier quota, then
 flip `DATA_SOURCE_MODE=live` in `.env` with zero code changes downstream.
 """
 
