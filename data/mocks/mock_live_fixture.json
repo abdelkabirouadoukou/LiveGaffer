@@ -1,0 +1,43 @@
+{
+  "response": [
+    {
+      "fixture": {
+        "id": 1035001,
+        "referee": "A. Mateu Lahoz",
+        "timezone": "UTC",
+        "date": "2026-06-30T19:00:00+00:00",
+        "venue": "Estadio Santiago Bernabeu",
+        "status": {
+          "long": "Second Half",
+          "short": "2H",
+          "elapsed": 63
+        }
+      },
+      "league": {
+        "id": 140,
+        "name": "La Liga",
+        "country": "Spain",
+        "season": 2025,
+        "round": "Regular Season - 35"
+      },
+      "teams": {
+        "home": {
+          "id": 541,
+          "name": "Real Madrid",
+          "logo": "https://media.api-sports.io/football/teams/541.png",
+          "winner": null
+        },
+        "away": {
+          "id": 529,
+          "name": "Barcelona",
+          "logo": "https://media.api-sports.io/football/teams/529.png",
+          "winner": null
+        }
+      },
+      "goals": {
+        "home": 1,
+        "away": 1
+      }
+    }
+  ]
+}

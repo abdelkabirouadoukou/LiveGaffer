@@ -1,0 +1,21 @@
+[project]
+name = "live-soccer-ai-manager"
+version = "0.1.0"
+description = "Live Soccer Assistant Manager & AI Analyst — free-tier tactical AI backend"
+requires-python = ">=3.11"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"

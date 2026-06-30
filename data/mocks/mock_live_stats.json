@@ -1,0 +1,36 @@
+{
+  "response": [
+    {
+      "team": {"id": 541, "name": "Real Madrid", "logo": "https://media.api-sports.io/football/teams/541.png"},
+      "statistics": [
+        {"type": "Shots on Goal", "value": 6},
+        {"type": "Shots off Goal", "value": 4},
+        {"type": "Total Shots", "value": 13},
+        {"type": "Blocked Shots", "value": 3},
+        {"type": "Corner Kicks", "value": 5},
+        {"type": "Ball Possession", "value": "47%"},
+        {"type": "Yellow Cards", "value": 1},
+        {"type": "Red Cards", "value": null},
+        {"type": "Total passes", "value": 412},
+        {"type": "Passes accurate", "value": 358},
+        {"type": "Passes %", "value": "87%"}
+      ]
+    },
+    {
+      "team": {"id": 529, "name": "Barcelona", "logo": "https://media.api-sports.io/football/teams/529.png"},
+      "statistics": [
+        {"type": "Shots on Goal", "value": 5},
+        {"type": "Shots off Goal", "value": 6},
+        {"type": "Total Shots", "value": 15},
+        {"type": "Blocked Shots", "value": 4},
+        {"type": "Corner Kicks", "value": 7},
+        {"type": "Ball Possession", "value": "53%"},
+        {"type": "Yellow Cards", "value": 0},
+        {"type": "Red Cards", "value": null},
+        {"type": "Total passes", "value": 489},
+        {"type": "Passes accurate", "value": 441},
+        {"type": "Passes %", "value": "90%"}
+      ]
+    }
+  ]
+}

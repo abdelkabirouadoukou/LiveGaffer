@@ -1,0 +1,58 @@
+{
+  "response": [
+    {
+      "team": {
+        "id": 541,
+        "name": "Real Madrid",
+        "logo": "https://media.api-sports.io/football/teams/541.png"
+      },
+      "formation": "4-3-3",
+      "startXI": [
+        {"player": {"id": 1, "name": "T. Courtois", "number": 1, "position": "G", "grid": "1:1"}},
+        {"player": {"id": 2, "name": "D. Carvajal", "number": 2, "position": "D", "grid": "2:4"}},
+        {"player": {"id": 3, "name": "A. Rudiger", "number": 22, "position": "D", "grid": "2:3"}},
+        {"player": {"id": 4, "name": "E. Militao", "number": 3, "position": "D", "grid": "2:2"}},
+        {"player": {"id": 5, "name": "F. Mendy", "number": 23, "position": "D", "grid": "2:1"}},
+        {"player": {"id": 6, "name": "Tchouameni", "number": 18, "position": "M", "grid": "3:2"}},
+        {"player": {"id": 7, "name": "Bellingham", "number": 5, "position": "M", "grid": "3:1"}},
+        {"player": {"id": 8, "name": "F. Valverde", "number": 8, "position": "M", "grid": "3:3"}},
+        {"player": {"id": 9, "name": "Vinicius Jr", "number": 7, "position": "F", "grid": "4:1"}},
+        {"player": {"id": 10, "name": "Mbappe", "number": 9, "position": "F", "grid": "4:2"}},
+        {"player": {"id": 11, "name": "Rodrygo", "number": 11, "position": "F", "grid": "4:3"}}
+      ],
+      "substitutes": [
+        {"player": {"id": 12, "name": "A. Lunin", "number": 13, "position": "G"}},
+        {"player": {"id": 13, "name": "Brahim Diaz", "number": 21, "position": "M"}},
+        {"player": {"id": 14, "name": "Endrick", "number": 16, "position": "F"}}
+      ],
+      "coach": {"id": 201, "name": "C. Ancelotti"}
+    },
+    {
+      "team": {
+        "id": 529,
+        "name": "Barcelona",
+        "logo": "https://media.api-sports.io/football/teams/529.png"
+      },
+      "formation": "4-2-3-1",
+      "startXI": [
+        {"player": {"id": 21, "name": "M. Ter Stegen", "number": 1, "position": "G", "grid": "1:1"}},
+        {"player": {"id": 22, "name": "J. Cancelo", "number": 2, "position": "D", "grid": "2:4"}},
+        {"player": {"id": 23, "name": "Araujo", "number": 4, "position": "D", "grid": "2:3"}},
+        {"player": {"id": 24, "name": "Cubarsi", "number": 5, "position": "D", "grid": "2:2"}},
+        {"player": {"id": 25, "name": "A. Balde", "number": 3, "position": "D", "grid": "2:1"}},
+        {"player": {"id": 26, "name": "F. de Jong", "number": 21, "position": "M", "grid": "3:2"}},
+        {"player": {"id": 27, "name": "Pedri", "number": 8, "position": "M", "grid": "3:3"}},
+        {"player": {"id": 28, "name": "Gavi", "number": 6, "position": "M", "grid": "4:2"}},
+        {"player": {"id": 29, "name": "Raphinha", "number": 11, "position": "M", "grid": "4:1"}},
+        {"player": {"id": 30, "name": "Yamal", "number": 27, "position": "M", "grid": "4:3"}},
+        {"player": {"id": 31, "name": "R. Lewandowski", "number": 9, "position": "F", "grid": "5:1"}}
+      ],
+      "substitutes": [
+        {"player": {"id": 32, "name": "I. Pena", "number": 13, "position": "G"}},
+        {"player": {"id": 33, "name": "Ferran Torres", "number": 7, "position": "F"}},
+        {"player": {"id": 34, "name": "Fermin Lopez", "number": 16, "position": "M"}}
+      ],
+      "coach": {"id": 202, "name": "H. Flick"}
+    }
+  ]
+}

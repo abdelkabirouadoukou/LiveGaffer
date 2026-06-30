@@ -1,0 +1,40 @@
+{
+  "response": [
+    {
+      "time": {"elapsed": 23, "extra": null},
+      "team": {"id": 529, "name": "Barcelona", "logo": "https://media.api-sports.io/football/teams/529.png"},
+      "player": {"id": 30, "name": "Yamal"},
+      "assist": {"id": 27, "name": "Pedri"},
+      "type": "Goal",
+      "detail": "Normal Goal",
+      "comments": null
+    },
+    {
+      "time": {"elapsed": 41, "extra": null},
+      "team": {"id": 541, "name": "Real Madrid", "logo": "https://media.api-sports.io/football/teams/541.png"},
+      "player": {"id": 7, "name": "Bellingham"},
+      "assist": {"id": null, "name": null},
+      "type": "Card",
+      "detail": "Yellow Card",
+      "comments": "Tactical foul"
+    },
+    {
+      "time": {"elapsed": 57, "extra": null},
+      "team": {"id": 541, "name": "Real Madrid", "logo": "https://media.api-sports.io/football/teams/541.png"},
+      "player": {"id": 10, "name": "Mbappe"},
+      "assist": {"id": 9, "name": "Vinicius Jr"},
+      "type": "Goal",
+      "detail": "Normal Goal",
+      "comments": null
+    },
+    {
+      "time": {"elapsed": 61, "extra": null},
+      "team": {"id": 529, "name": "Barcelona", "logo": "https://media.api-sports.io/football/teams/529.png"},
+      "player": {"id": 33, "name": "Ferran Torres"},
+      "assist": {"id": null, "name": null},
+      "type": "subst",
+      "detail": "Raphinha",
+      "comments": null
+    }
+  ]
+}
