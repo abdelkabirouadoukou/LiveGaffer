@@ -9,7 +9,7 @@ tenacity>=8.2,<9.0          # retry/backoff for free-tier rate limits
 
 # --- AI Engine clients ------------------------------------------------------
 groq>=0.9,<1.0
-google-generativeai>=0.7,<1.0
+google-genai>=1.0,<2.0
 
 # --- Presentation layer (Phase 5) -------------------------------------------
 streamlit>=1.35,<2.0
